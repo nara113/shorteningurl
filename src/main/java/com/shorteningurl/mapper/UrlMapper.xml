@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shorteningurl.mapper.UrlMapper">
+    <select id="selectUrl" parameterType="String" resultType="com.shorteningurl.domain.Url">
+        SELECT url_id AS urlId
+             , original_url AS originalUrl
+          FROM urls
+         WHERE original_url = #{originalUrl}
+    </select>
+
+    <select id="selectOriginalUrl" parameterType="long" resultType="String">
+        SELECT original_url
+          FROM urls
+         WHERE url_id = #{urlId}
+    </select>
+
+    <update id="updateCount" parameterType="long">
+        UPDATE urls
+           SET req_cnt = req_cnt + 1
+         WHERE url_id = #{urlId}
+    </update>
+
+    <insert id="insertUrl" useGeneratedKeys="true" keyProperty="urlId" parameterType="com.shorteningurl.domain.Url">
+        INSERT INTO urls (original_url, req_cnt)
+        VALUES (#{originalUrl}, 1)
+    </insert>
+</mapper>
